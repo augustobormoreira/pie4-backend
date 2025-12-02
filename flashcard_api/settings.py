@@ -107,10 +107,17 @@ if not DEBUG:
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# 1. Obter a URL de ambiente
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+# 2. SE FOR O PLACEHOLDER LITERAL DO RENDER, IGNORE (Força o SQLite durante o Build)
+if DATABASE_URL and DATABASE_URL.startswith('${database.'):
+    DATABASE_URL = None
+
 DATABASES = {
     'default': dj_database_url.config(
-        # Tenta ler a variável DATABASE_URL
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        # Usa a URL resolvida ou o fallback para SQLite se for None
+        default=DATABASE_URL or 'sqlite:///db.sqlite3',
         # Configuração padrão para a conexão com o banco de dados (tempo de vida da conexão)
         conn_max_age=600
     )
