@@ -107,16 +107,25 @@ if not DEBUG:
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 # 1. Obter a URL de ambiente
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-# 2. SE FOR O PLACEHOLDER LITERAL DO RENDER, IGNORE (Força o SQLite durante o Build)
+# 2. CORREÇÃO DEFINITIVA DO RENDER: 
+# Se a URL for o placeholder literal, DELETAMOS a variável do ambiente.
+# Isso garante que o dj_database_url use o valor 'default' no Build.
 if DATABASE_URL and DATABASE_URL.startswith('${database.'):
-    DATABASE_URL = None
+    # Deleta a variável do ambiente para forçar o fallback
+    del os.environ['DATABASE_URL']
+    # Define a variável local como None
+    DATABASE_URL = None 
 
 DATABASES = {
     'default': dj_database_url.config(
-        # Usa a URL resolvida ou o fallback para SQLite se for None
+        # Se a variável foi deletada (Build), usa o fallback SQLite.
+        # Se a variável foi resolvida (Start), usa o valor real.
         default=DATABASE_URL or 'sqlite:///db.sqlite3',
         # Configuração padrão para a conexão com o banco de dados (tempo de vida da conexão)
         conn_max_age=600
