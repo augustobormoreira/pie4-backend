@@ -38,6 +38,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 
+# Use REGEX para ambientes de produção ou de teste mais dinâmicos
+# ---------------------------------------------------------------
+# Adicione esta nova configuração:
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    # Permite qualquer subdomínio do render.com (se for o caso)
+    r'^https?://.*\.onrender\.com$', 
+]
 # Application definition
 
 INSTALLED_APPS = [
