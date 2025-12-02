@@ -170,6 +170,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Novo campo essencial para o 'collectstatic' funcionar em produção
+STATIC_ROOT = BASE_DIR / 'staticfiles' 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
