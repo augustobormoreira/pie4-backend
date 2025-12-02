@@ -108,5 +108,6 @@ media/
 *.db
 *.pid
 
-**/migrations/**
-!**/migrations/__init__.py
+# AQUI ESTÁ O PROBLEMA:
+# REMOVA esta linha ou comente-a: **/migrations/** # Mantenha APENAS esta linha, garantindo que suas migrações sejam rastreadas:
+# !**/migrations/__init__.py
