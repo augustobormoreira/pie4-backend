@@ -7,3 +7,5 @@ Faker==37.11.0
 PyJWT==2.10.1
 sqlparse==0.5.3
 tzdata==2025.2
+dj-database-url
+psycopg2-binary

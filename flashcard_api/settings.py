@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url # Novo import
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,14 +85,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'flashcard_api.wsgi.application'
 
 
+if not DEBUG:
+    # Render usa um proxy, esta linha é essencial para o HTTPS funcionar
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # Adicione o domínio do Render quando estiver em produção
+    ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        # Tenta ler a variável DATABASE_URL
+        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        # Configuração padrão para a conexão com o banco de dados (tempo de vida da conexão)
+        conn_max_age=600
+    )
 }
 
 
